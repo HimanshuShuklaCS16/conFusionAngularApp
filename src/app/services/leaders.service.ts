@@ -6,14 +6,14 @@ import {Leader} from '../shared/leader';
 })
 export class LeadersService {
 
-  getLeaders():Leader[]{
-    return leaders;
+  getLeaders():Promise<Leader[]>{
+    return Promise.resolve(leaders);
   }
-  getLeader(id:string):Leader{
-    return leaders.filter((leader) => (leader.id===id))[0];
+  getLeader(id:string):Promise<Leader>{
+    return Promise.resolve(leaders.filter((leader) => (leader.id===id))[0]);
   }
-  getFeaturedLeader():Leader{
-    return leaders.filter((leader) => leader.featured)[0];
+  getFeaturedLeader():Promise<Leader>{
+    return Promise.resolve(leaders.filter((leader) => leader.featured)[0]);
   }
     constructor() { }
 }
