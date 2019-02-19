@@ -12,7 +12,7 @@ leaders:Leader[];
 
   ngOnInit() {
 this.leadersservice.getLeaders()
-.then(leaders=>this.leaders=leaders);
+.subscribe(leaders=>this.leaders=leaders);
   }
 
 }
