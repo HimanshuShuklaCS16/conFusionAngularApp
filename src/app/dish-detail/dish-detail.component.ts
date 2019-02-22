@@ -6,10 +6,28 @@ import {DishService} from '../services/dish.service';
 import {switchMap } from 'rxjs/operators';
 import {FormBuilder,FormGroup,Validators} from '@angular/forms';
 import {Comment} from '../shared/comment';
+import {trigger,state,style,animate,transition} from '@angular/animations';
 @Component({
   selector: 'app-dish-detail',
   templateUrl: './dish-detail.component.html',
-  styleUrls: ['./dish-detail.component.scss']
+  styleUrls: ['./dish-detail.component.scss'],
+  animations:[
+    trigger('visibility',[
+      state('shown',style({
+        transform:'scale(1.0)',
+        opacity:1
+      })
+
+    ),
+    state('hidden',style({
+      transform:'scale(0.5)',
+      opacity:0
+    })),
+    transition('*=>*',animate('0.5s ease-in-out'))
+    ]
+
+    )
+  ]
 })
 export class DishDetailComponent implements OnInit {
 @ViewChild("newform") commentFormDirective;
@@ -20,6 +38,7 @@ dishIds:string[];
 prev:string;
 next:string;
 dishCopy:Dish;
+visibility='shown';
   constructor(private dishservice:DishService,
     @Inject('BaseURL')private baseURL,
     private route:ActivatedRoute,
@@ -44,8 +63,8 @@ this.createForm();
  };
   ngOnInit() {
     this.dishservice.getDishIds().subscribe(dishIds=> this.dishIds=dishIds);
-       const id = this.route.params.pipe(switchMap((params:Params)=> this.dishservice.getDish(params['id'])))
-       .subscribe(dish=>{this.dish=dish;this.dishCopy=dish;this.setPrevNext(dish.id);});
+       const id = this.route.params.pipe(switchMap((params:Params)=> {this.visibility='hidden';return this.dishservice.getDish(params['id']);}))
+       .subscribe(dish=>{this.dish=dish;this.dishCopy=dish;this.setPrevNext(dish.id);this.visibility='shown'});
   }
   setPrevNext(dishId:string){
   const index=this.dishIds.indexOf(dishId);
