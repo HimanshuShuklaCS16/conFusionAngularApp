@@ -30,7 +30,7 @@ import { ContactComponent } from './contact/contact.component';
 import {DishService} from './services/dish.service';
 import {PromotionService} from './services/promotion.service';
 import {LeadersService} from './services/leaders.service';
-
+import {ProcessHTTPserviceService} from './services/process-httpservice.service';
 import {AppRoutingModule} from './app-routing/app-routing.module';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -72,7 +72,7 @@ import { baseURL } from './shared/baseurl';
   entryComponents:[
     LoginComponent
   ],
-  providers: [DishService,PromotionService,LeadersService,
+  providers: [DishService,PromotionService,LeadersService,ProcessHTTPserviceService,
   {provide: 'BaseURL', useValue: baseURL}
   ],
   bootstrap: [AppComponent]

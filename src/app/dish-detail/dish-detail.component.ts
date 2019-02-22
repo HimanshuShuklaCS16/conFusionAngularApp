@@ -19,7 +19,7 @@ dish:Dish;
 dishIds:string[];
 prev:string;
 next:string;
-
+dishCopy:Dish;
   constructor(private dishservice:DishService,
     @Inject('BaseURL')private baseURL,
     private route:ActivatedRoute,
@@ -45,7 +45,7 @@ this.createForm();
   ngOnInit() {
     this.dishservice.getDishIds().subscribe(dishIds=> this.dishIds=dishIds);
        const id = this.route.params.pipe(switchMap((params:Params)=> this.dishservice.getDish(params['id'])))
-       .subscribe(dish=>{this.dish=dish;this.setPrevNext(dish.id);});
+       .subscribe(dish=>{this.dish=dish;this.dishCopy=dish;this.setPrevNext(dish.id);});
   }
   setPrevNext(dishId:string){
   const index=this.dishIds.indexOf(dishId);
@@ -89,8 +89,14 @@ onSubmit(){
   var d = new Date();
 var n = d.toISOString();
   this.comment.date=n;
-  this.dish.comments.push(this.comment);
-  console.log(this.comment);
+  this.dishCopy.comments.push(this.comment);
+  this.dishservice.putDish(this.dishCopy)
+  .subscribe(dish=>{
+    this.dish=dish;
+    this.dishCopy=dish;
+  });
+  //this.dish.comments.push(this.comment);
+
   this.commentForm.reset({
     author:'',
     comment:'',

@@ -17,7 +17,11 @@
       </mat-grid-tile>
     </mat-grid-list>
     </div>
-    <div [hidden]="dishes">
+    <div [hidden]="dishes || errmsg">
       <mat-spinner></mat-spinner><h4>Loading ... Please wait</h4>
       </div>
+      <div *ngIf="errmsg">
+        <h2>Error</h2>
+          <p>{{errmsg}}</p>
+        </div>
   </div>
