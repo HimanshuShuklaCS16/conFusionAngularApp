@@ -33,6 +33,8 @@ import {LeadersService} from './services/leaders.service';
 
 import {AppRoutingModule} from './app-routing/app-routing.module';
 import { LoginComponent } from './login/login.component';
+import { HttpClientModule } from '@angular/common/http';
+import { baseURL } from './shared/baseurl';
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,12 +66,15 @@ import { LoginComponent } from './login/login.component';
     MatProgressSpinnerModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   entryComponents:[
     LoginComponent
   ],
-  providers: [DishService,PromotionService,LeadersService],
+  providers: [DishService,PromotionService,LeadersService,
+  {provide: 'BaseURL', useValue: baseURL}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

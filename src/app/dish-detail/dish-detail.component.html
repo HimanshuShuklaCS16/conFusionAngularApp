@@ -7,7 +7,7 @@ fxLayoutGap.xs="0" *ngIf="dish" >
       <mat-card-header>
         <p>{{dish.name | uppercase}}</p>
         </mat-card-header>
-        <img mat-card-image src="{{dish.image}}" alt="{{dish.name}}">
+        <img mat-card-image src="{{baseURL + dish.image}}" alt="{{dish.name}}">
         <mat-card-content>
           <p>{{dish.description}}</p>
         </mat-card-content>
