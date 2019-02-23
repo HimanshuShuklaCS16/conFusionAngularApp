@@ -5,7 +5,6 @@ export function visibility(){
           transform:'scale(1.0)',
           opacity:1
         })
-
       ),
       state('hidden',style({
         transform:'scale(0.5)',

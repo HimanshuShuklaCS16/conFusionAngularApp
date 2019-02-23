@@ -1,24 +1,40 @@
 import { Injectable } from '@angular/core';
-import {leaders} from '../shared/leaders';
 import {Leader} from '../shared/leader';
-import {Observable,of} from 'rxjs';
-import {delay} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {delay,map,catchError} from 'rxjs/operators';
+import {HttpClient,HttpHeaders} from '@angular/common/http';
+import {baseURL} from '../shared/baseurl';
+import {ProcessHTTPserviceService} from './process-httpservice.service';
 @Injectable({
   providedIn: 'root'
 })
 export class LeadersService {
 
-  getLeaders():Observable<Leader[]>{
-    return of (leaders).pipe(delay(2000));
+    constructor(private http:HttpClient,private processHTTPmsg:ProcessHTTPserviceService) { }
 
-  }
-  getLeader(id:string):Observable<Leader>{
-    return of (leaders.filter((leader) => (leader.id===id))[0]).pipe(delay(2000));
-
-}
-  getFeaturedLeader():Observable<Leader>{
-    return of (leaders.filter((leader) => leader.featured)[0]).pipe(delay(2000));
-
-  }
-    constructor() { }
-}
+    getLeaders():Observable<Leader[]>{
+      return this.http.get<Leader[]>(baseURL + 'leadership')
+      .pipe(catchError(this.processHTTPmsg.handleError));
+    }
+    getLeader(id:string):Observable<Leader>{
+      return this.http.get<Leader>(baseURL + 'leadership/' + id)
+      .pipe(catchError(this.processHTTPmsg.handleError));
+    }
+    getFeaturedLeader():Observable<Leader>{
+      return this.http.get<Leader[]>(baseURL + 'leadership?featured=true').pipe(map
+        (leadership=>leadership[0]))
+        .pipe(catchError(this.processHTTPmsg.handleError));
+    }
+    getLeaderIds():Observable<String[] | any>{
+      return this.getLeaders().pipe(map(leadership=>leadership.map(leader=>leader.id)))
+      .pipe(catchError(error=>error));
+    }
+    putDish(leader:Leader):Observable<Leader>{
+      const httpOptions = {
+     headers: new HttpHeaders({
+       'Content-Type':  'application/json'
+     })
+   };
+      return this.http.put<Leader>(baseURL+'leadership/'+leader.id,leader,httpOptions)
+      .pipe(catchError(this.processHTTPmsg.handleError));
+    }}
